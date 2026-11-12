@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Водный Баланс — AquaPlay</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="game-header">
+  <a href="../../index.html" class="back-link">← AquaPlay</a>
+  <h1>🌊 Водный Баланс</h1>
+  <p class="subtitle">Держи уровень воды в зелёной зоне</p>
+</header>
+
+<main class="game">
+  <div class="game-inner">
+    <div class="reservoir-wrap">
+      <div class="zone zone-danger-high"></div>
+      <div class="zone zone-ok"></div>
+      <div class="zone zone-danger-low"></div>
+      <div class="water" id="water" style="height:50%"></div>
+      <div class="level-badge" id="levelBadge">50%</div>
+    </div>
+
+    <div class="panel">
+      <div class="stats">
+        <div class="stat"><span>Очки</span><b id="score">0</b></div>
+        <div class="stat"><span>Время</span><b id="time">0с</b></div>
+        <div class="stat"><span>Уровень</span><b id="levelTxt">50%</b></div>
+      </div>
+      <button id="btnOpen" class="btn btn-primary">⬇ Открыть шлюз</button>
+      <button id="btnRain" class="btn btn-rain">🌧 Вызвать дождь</button>
+      <div id="log" class="log"></div>
+    </div>
+  </div>
+</main>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h2 id="endTitle">Игра окончена</h2>
+    <p id="endText"></p>
+    <button onclick="restart()" class="btn btn-primary">🔄 Играть снова</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
