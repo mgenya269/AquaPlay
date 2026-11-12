@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AquaPlay — игры о воде</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    color: #e0f2ff;
+    background: radial-gradient(ellipse at top, #0d3355 0%, #071a2f 60%);
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  header { text-align: center; margin-bottom: 40px; }
+  .logo {
+    font-size: clamp(2rem, 6vw, 3rem);
+    font-weight: 800;
+    background: linear-gradient(90deg, #7dd3fc, #38bdf8, #0ea5e9);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .tagline { color: #94a3b8; margin-top: 8px; }
+  main { max-width: 1000px; margin: 0 auto; }
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .game-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: rgba(13,40,71,.75);
+    border: 1px solid #1e4976;
+    border-radius: 18px;
+    padding: 24px;
+    transition: transform .25s, border-color .25s, box-shadow .25s;
+  }
+  .game-card:hover {
+    transform: translateY(-4px);
+    border-color: #38bdf8;
+    box-shadow: 0 12px 40px rgba(56,189,248,.18);
+  }
+  .game-emoji { font-size: 2.6rem; display: block; margin-bottom: 12px; }
+  .game-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; }
+  .game-desc { font-size: .9rem; color: #94a3b8; margin-bottom: 16px; }
+  .badge {
+    display: inline-block;
+    font-size: .72rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    background: rgba(245,158,11,.15);
+    color: #f59e0b;
+    border: 1px solid rgba(245,158,11,.4);
+  }
+  footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: #94a3b8;
+    font-size: .85rem;
+    margin-top: 40px;
+    border-top: 1px solid #1e4976;
+  }
+  footer a { color: #38bdf8; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🌊 AquaPlay</div>
+  <p class="tagline">Интерактивные игры о воде и гидрологии</p>
+</header>
+
+<main>
+  <div class="games-grid">
+    <a class="game-card" href="games/water-balance/index.html">
+      <span class="game-emoji">🌊</span>
+      <h3 class="game-title">Водный Баланс</h3>
+      <p class="game-desc">Управляй шлюзом плотины и держи уровень воды в норме.</p>
+      <span class="badge">Играть</span>
+    </a>
+  </div>
+</main>
+
+<footer>
+  💧 <strong>AquaPlay</strong> ·
+  <a href="https://github.com/Yudzhen">Yudzhen</a> ·
+  MIT License
+</footer>
+
+</body>
+</html>
