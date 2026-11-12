@@ -24,6 +24,12 @@
   }
   .tagline { color: #94a3b8; margin-top: 8px; }
   main { max-width: 1000px; margin: 0 auto; }
+  .section-title {
+    font-size: 1.1rem;
+    color: #38bdf8;
+    margin: 30px 0 16px;
+    font-weight: 700;
+  }
   .games-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -70,6 +76,28 @@
     color: #22c55e;
     border: 1px solid rgba(34,197,94,.4);
   }
+  .achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .ach {
+    background: rgba(13,40,71,.5);
+    border: 1px solid #1e4976;
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+    opacity: .4;
+    transition: opacity .2s;
+  }
+  .ach.unlocked {
+    opacity: 1;
+    border-color: rgba(250,204,21,.5);
+    background: rgba(250,204,21,.08);
+  }
+  .ach-icon { font-size: 1.8rem; display: block; margin-bottom: 6px; }
+  .ach-name { font-size: .78rem; color: #cbd5e1; }
+  .ach.unlocked .ach-name { color: #facc15; font-weight: 700; }
   footer {
     text-align: center;
     padding: 40px 20px;
@@ -89,6 +117,7 @@
 </header>
 
 <main>
+  <h2 class="section-title">🎮 Игры</h2>
   <div class="games-grid">
     <a class="game-card" href="games/water-balance/index.html">
       <span class="game-emoji">🌊</span>
@@ -98,6 +127,9 @@
       <span class="record-badge" id="wbRecord" style="display:none"></span>
     </a>
   </div>
+
+  <h2 class="section-title">🏆 Достижения</h2>
+  <div class="achievements-grid" id="achGrid"></div>
 </main>
 
 <footer>
@@ -107,14 +139,35 @@
 </footer>
 
 <script>
-  // Показываем рекорд из localStorage, если есть
+  // Список достижений (синхронизирован с игрой)
+  const ACHIEVEMENTS = [
+    { id: 'first_run',  icon: '🎮', name: 'Первый запуск' },
+    { id: 'score_100',  icon: '💯', name: '100 очков' },
+    { id: 'score_500',  icon: '🔥', name: '500 очков' },
+    { id: 'score_1000', icon: '👑', name: '1000 очков' },
+    { id: 'time_60',    icon: '⏱',  name: 'Минута в игре' },
+    { id: 'combo_5',    icon: '⚡', name: 'Комбо ×5' },
+    { id: 'level_3',    icon: '📈', name: 'Сложность 3' },
+  ];
+
   try {
-    const rec = localStorage.getItem('aquaplay_water_balance_record');
+    // Рекорд на карточке
+    const rec = localStorage.getItem('aquaplay_wb_record');
     if (rec !== null) {
       const el = document.getElementById('wbRecord');
       el.textContent = '🏆 ' + rec;
       el.style.display = 'inline-block';
     }
+
+    // Достижения
+    const unlocked = JSON.parse(localStorage.getItem('aquaplay_wb_achievements') || '[]');
+    const grid = document.getElementById('achGrid');
+    grid.innerHTML = ACHIEVEMENTS.map(a => `
+      <div class="ach ${unlocked.includes(a.id) ? 'unlocked' : ''}">
+        <span class="ach-icon">${unlocked.includes(a.id) ? a.icon : '🔒'}</span>
+        <span class="ach-name">${a.name}</span>
+      </div>
+    `).join('');
   } catch (e) {}
 </script>
 
