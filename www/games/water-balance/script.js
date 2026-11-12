@@ -1,12 +1,14 @@
 const waterEl  = document.getElementById('water');
 const badgeEl  = document.getElementById('levelBadge');
 const scoreEl  = document.getElementById('score');
+const bestEl   = document.getElementById('best');
 const timeEl   = document.getElementById('time');
 const levelTxt = document.getElementById('levelTxt');
 const logEl    = document.getElementById('log');
 const overlay  = document.getElementById('overlay');
 const btnOpen  = document.getElementById('btnOpen');
 const btnRain  = document.getElementById('btnRain');
+const newRecordMsg = document.getElementById('newRecordMsg');
 
 const TICK_MS = 100;
 const TICKS_PER_SEC = 10;
@@ -18,14 +20,34 @@ const EVAPORATION = 0.8;
 const INFLOW_CHANCE = 0.35;
 const SCORE_GAIN = 5, SCORE_PENALTY = 3;
 
+const STORAGE_KEY = 'aquaplay_water_balance_record';
+
 const state = {
   level: 50, score: 0, time: 0, tick: 0,
   running: true, rainCooldown: 0,
+  best: 0,
 };
 
 let loopId = null;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
+// ===== Рекорды (localStorage) =====
+function loadBest() {
+  try {
+    const v = localStorage.getItem(STORAGE_KEY);
+    state.best = v ? parseInt(v, 10) || 0 : 0;
+  } catch (e) {
+    state.best = 0;
+  }
+}
+
+function saveBest(value) {
+  try {
+    localStorage.setItem(STORAGE_KEY, String(value));
+  } catch (e) {}
+}
+
+// ===== Лог =====
 function log(msg, cls = 'l-info') {
   const d = document.createElement('div');
   d.className = cls;
@@ -34,15 +56,18 @@ function log(msg, cls = 'l-info') {
   while (logEl.children.length > 25) logEl.lastChild.remove();
 }
 
+// ===== Рендер =====
 function render() {
   const lvl = clamp(state.level, 0, 100);
   waterEl.style.height = lvl + '%';
   badgeEl.textContent  = Math.round(lvl) + '%';
   levelTxt.textContent = Math.round(lvl) + '%';
   scoreEl.textContent  = state.score;
+  bestEl.textContent   = state.best;
   timeEl.textContent   = state.time + 'с';
 }
 
+// ===== Действия игрока =====
 btnOpen.addEventListener('click', () => {
   if (!state.running) return;
   state.level -= DRAIN_AMOUNT;
@@ -58,6 +83,7 @@ btnRain.addEventListener('click', () => {
   render();
 });
 
+// ===== Главный цикл =====
 function gameTick() {
   if (!state.running) return;
   state.tick++;
@@ -97,16 +123,32 @@ function gameTick() {
   render();
 }
 
+// ===== Конец игры =====
 function gameOver(title, text) {
   state.running = false;
   clearInterval(loopId);
+
+  // Проверка нового рекорда
+  const isNewRecord = state.score > state.best;
+  if (isNewRecord) {
+    state.best = state.score;
+    saveBest(state.best);
+    newRecordMsg.style.display = 'block';
+    log(`🏆 Новый рекорд: ${state.best}!`, 'l-good');
+  } else {
+    newRecordMsg.style.display = 'none';
+  }
+
   document.getElementById('endTitle').textContent = title;
   document.getElementById('endText').textContent =
-    `${text}\n\nОчки: ${state.score}  ·  Время: ${state.time} сек`;
+    `${text}\n\nОчки: ${state.score}  ·  Время: ${state.time} сек\nРекорд: ${state.best}`;
   overlay.classList.add('show');
+
   log('💀 ' + title, 'l-bad');
+  render();
 }
 
+// ===== Перезапуск =====
 function restart() {
   state.level = 50;
   state.score = 0;
@@ -117,6 +159,7 @@ function restart() {
   btnRain.textContent = '🌧 Вызвать дождь';
   btnRain.disabled = false;
   overlay.classList.remove('show');
+  newRecordMsg.style.display = 'none';
   logEl.innerHTML = '';
   log('🌊 Новая сессия. Уровень: 50%', 'l-good');
   render();
@@ -126,6 +169,9 @@ function restart() {
 
 window.restart = restart;
 
+// ===== Старт =====
+loadBest();
 log('🌊 Добро пожаловать в «Водный Баланс»!', 'l-good');
 log('Держи уровень в зоне 20–70%', 'l-info');
+if (state.best > 0) log(`🏆 Твой рекорд: ${state.best}`, 'l-good');
 restart();
