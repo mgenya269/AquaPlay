@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AquaPlay — игры о воде</title>
+<meta name="theme-color" content="#0ea5e9">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjMyIiBmaWxsPSIjMDcxYTJmIi8+PHRleHQgeD0iOTYiIHk9IjEzMCIgZm9udC1zaXplPSIxMTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPvCfjIo8L3RleHQ+PC9zdmc+">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -139,7 +142,6 @@
 </footer>
 
 <script>
-  // Список достижений (синхронизирован с игрой)
   const ACHIEVEMENTS = [
     { id: 'first_run',  icon: '🎮', name: 'Первый запуск' },
     { id: 'score_100',  icon: '💯', name: '100 очков' },
@@ -151,7 +153,6 @@
   ];
 
   try {
-    // Рекорд на карточке
     const rec = localStorage.getItem('aquaplay_wb_record');
     if (rec !== null) {
       const el = document.getElementById('wbRecord');
@@ -159,7 +160,6 @@
       el.style.display = 'inline-block';
     }
 
-    // Достижения
     const unlocked = JSON.parse(localStorage.getItem('aquaplay_wb_achievements') || '[]');
     const grid = document.getElementById('achGrid');
     grid.innerHTML = ACHIEVEMENTS.map(a => `
@@ -169,6 +169,12 @@
       </div>
     `).join('');
   } catch (e) {}
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    });
+  }
 </script>
 
 </body>
