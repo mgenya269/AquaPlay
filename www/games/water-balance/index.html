@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Водный Баланс — AquaPlay</title>
 <link rel="stylesheet" href="style.css">
 </head>
@@ -16,7 +16,7 @@
 
 <main class="game">
   <div class="game-inner">
-    <div class="reservoir-wrap">
+    <div class="reservoir-wrap" id="reservoir">
       <div class="zone zone-danger-high"></div>
       <div class="zone zone-ok"></div>
       <div class="zone zone-danger-low"></div>
@@ -30,6 +30,8 @@
         <div class="stat"><span>Рекорд</span><b id="best">0</b></div>
         <div class="stat"><span>Время</span><b id="time">0с</b></div>
         <div class="stat"><span>Уровень</span><b id="levelTxt">50%</b></div>
+        <div class="stat combo-stat"><span>Комбо</span><b id="combo">×1.0</b></div>
+        <div class="stat"><span>Сложность</span><b id="difficulty">1</b></div>
       </div>
       <button id="btnOpen" class="btn btn-primary">⬇ Открыть шлюз</button>
       <button id="btnRain" class="btn btn-rain">🌧 Вызвать дождь</button>
@@ -43,7 +45,24 @@
     <h2 id="endTitle">Игра окончена</h2>
     <p id="endText"></p>
     <p id="newRecordMsg" class="new-record" style="display:none">🎉 Новый рекорд!</p>
+    <div id="achievementsUnlocked" class="achievements-unlocked" style="display:none"></div>
     <button onclick="restart()" class="btn btn-primary">🔄 Играть снова</button>
+  </div>
+</div>
+
+<div class="overlay" id="helpOverlay">
+  <div class="modal">
+    <h2>📖 Как играть</h2>
+    <p style="text-align:left; line-height:1.7;">
+      🌊 <b>Цель:</b> держать уровень воды в зелёной зоне (20–70%).<br><br>
+      ⬇ <b>Шлюз</b> — сбрасывает воду (если перелив).<br>
+      🌧 <b>Дождь</b> — добавляет воду (если пересыхание).<br><br>
+      💧 Вода прибывает случайно и испаряется постоянно.<br>
+      🔥 <b>Комбо</b> растёт, пока ты в норме — множитель очков до ×5.<br>
+      📈 Каждые 30 секунд сложность растёт.<br><br>
+      🏆 Бей рекорды и открывай достижения!
+    </p>
+    <button onclick="document.getElementById('helpOverlay').classList.remove('show')" class="btn btn-primary">Понятно</button>
   </div>
 </div>
 
